@@ -13,7 +13,7 @@ interface FindAllWhere {
   scoreFilter: "lte" | "gt";
 }
 
-function findAll(findAllWhere?: FindAllWhere) {
+async function findAll(findAllWhere?: FindAllWhere) {
   const filter = getFindAllFilter(findAllWhere);
 
   return prisma.recommendation.findMany({
@@ -23,7 +23,7 @@ function findAll(findAllWhere?: FindAllWhere) {
   });
 }
 
-function getAmountByScore(take: number) {
+async function getAmountByScore(take: number) {
   return prisma.recommendation.findMany({
     orderBy: { score: "desc" },
     take,
@@ -42,13 +42,13 @@ function getFindAllFilter(
   };
 }
 
-function find(id: number) {
+async function find(id: number) {
   return prisma.recommendation.findUnique({
     where: { id },
   });
 }
 
-function findByName(name: string) {
+async function findByName(name: string) {
   return prisma.recommendation.findUnique({
     where: { name },
   });

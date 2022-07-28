@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "test": "dotenv -e .env.test prisma migrate dev && cross-env NODE_OPTIONS=--experimental-vm-modules dotenv -e .env.test jest ./tests/integration -i",
-    "test:unit": "cross-env NODE_OPTIONS=--experimental-vm-modules dotenv -e .env.test jest ./tests/unit -i",
+    "test:unit": "cross-env NODE_OPTIONS=--experimental-vm-modules jest ./tests/unit -i",
     "dev": "nodemon src/server.ts",
     "dev:test": "dotenv -e .env.test nodemon src/server.ts",
     "ts": "ts-node src/server.ts"
