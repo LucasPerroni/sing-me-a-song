@@ -23,3 +23,11 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+Cypress.Commands.add("resetDatabase", () => {
+  cy.request("POST", "http://localhost:5000/recommendations/reset")
+})
+
+Cypress.Commands.add("createRecommendation", (data) => {
+  cy.request("post", "http://localhost:5000/recommendations", data)
+})
