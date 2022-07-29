@@ -4,7 +4,7 @@ import { jest } from "@jest/globals"
 import { recommendationService as Service } from "../../src/services/recommendationsService.js"
 import { recommendationRepository } from "../../src/repositories/recommendationRepository.js"
 
-jest.mock("../../src/repositories/recommendationRepository.js")
+jest.mock("../../src/repositories/recommendationRepository")
 
 describe("Test insert()", () => {
   it("Insert test return true", async () => {

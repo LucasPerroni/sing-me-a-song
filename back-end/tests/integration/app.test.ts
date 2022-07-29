@@ -1,5 +1,6 @@
 import supertest from "supertest"
 import { faker } from "@faker-js/faker"
+import { jest } from "@jest/globals"
 
 import app from "../../src/app.js"
 import { prisma } from "../../src/database.js"
@@ -128,12 +129,47 @@ describe("GET /recommendations/:id", () => {
   })
 })
 
-// TODO: finish this route
 describe("GET /recommendations/random", () => {
   it("return 404 without any recommendation", async () => {
     const response = await supertest(app).get("/recommendations/random")
     expect(response.status).toBe(404)
     expect(response.body.id).toBeUndefined()
+  })
+
+  it("return recommendation with more than 10 votes", async () => {
+    jest.spyOn(Math, "random").mockImplementationOnce(() => 0.5)
+
+    for (let i = 0; i < 9; i++) {
+      await Factory.createRecommendation()
+    }
+
+    const { link } = await Factory.createRecommendationAndReturnLink()
+
+    for (let i = 0; i < 11; i++) {
+      await Factory.upvoteRecommendation(link.id)
+    }
+
+    const response = await supertest(app).get("/recommendations/random")
+
+    expect(response.status).toBe(200)
+    expect(response.body.id).toStrictEqual(link.id)
+  })
+
+  it("return recommendation with less than 10 votes", async () => {
+    jest.spyOn(Math, "random").mockImplementationOnce(() => 0.8)
+
+    for (let i = 0; i < 9; i++) {
+      const { link } = await Factory.createRecommendationAndReturnLink()
+      for (let i = 0; i < 11; i++) {
+        await Factory.upvoteRecommendation(link.id)
+      }
+    }
+
+    const { link } = await Factory.createRecommendationAndReturnLink()
+    const response = await supertest(app).get("/recommendations/random")
+
+    expect(response.status).toBe(200)
+    expect(response.body.id).toStrictEqual(link.id)
   })
 })
 
